@@ -21,10 +21,16 @@
   },
   "devDependencies": {
     "colors": "^1.0.3",
+    "del": "^1.0.0",
     "gulp": "^3.8.10",
+    "gulp-angular-filesort": "^1.0.4",
+    "gulp-bower": "0.0.7",
+    "gulp-inject": "^1.0.2",
+    "gulp-sass": "^1.1.0",
     "gulp-watch": "^1.1.0",
     "rangle-gulp": "0.0.7",
-    "run-sequence": "^1.0.2"
+    "run-sequence": "^1.0.2",
+    "through2": "^0.6.3"
   },
   "peerDependencies": {
     "koast": ">=0.4.5"
