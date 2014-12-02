@@ -13,7 +13,7 @@ var cp = require('ncp').ncp;
 var through = require('through2');
 
 
-
+var sassFiles = ['src/app/**/*sass', 'src/app/**/*scss'];
 var htmlFiles = ['src/app/**/*html', 'src/index.html'];
 var angularFiles = ['!src/app/**/*.test.js',
   'src/app/app.js',
@@ -46,12 +46,12 @@ var karamConfig = {
 
 gulp.task('build_bower', function (done) {
   bower().on('end', function () {
-    fs.symlink(__dirname + '/src/bower_components', 'build/bower_components', done);
+    fs.symlinkSync(__dirname + '/src/bower_components', 'build/bower_components');
+    done();
   });
 });
 
 gulp.task('build_html', function () {
-  del('build');
   return gulp.src(['src/app/**/*html', 'src/index.html'], {
       base: 'src'
     })
@@ -70,7 +70,7 @@ gulp.task('build_angular', function () {
 });
 
 gulp.task('build_css', function () {
-  return gulp.src(['src/app/**/*sass', 'src/app/**/*scss'], {
+  return gulp.src(sassFiles, {
       base: 'src'
     })
     .pipe(sass())
@@ -84,16 +84,22 @@ gulp.task('build', function () {
 });
 
 gulp.task('watch', function () {
-  watch(angularFiles.concat(htmlFiles), {
-    base: 'src'
-  }, function (files) {
-    files.pipe(gulp.dest('build'));
-    return gulp.src(htmlFiles, {
-        base: 'src'
+  watch(sassFiles, { base: 'src' })
+    .pipe(sass({errLogToConsole:true}))
+    .pipe(gulp.dest('build'));
+
+  watch(htmlFiles, { base: 'src' })
+    .pipe(inject(
+      gulp.src(angularFiles).pipe(angularFileSort()), {
+        relative: true
       })
-      .pipe(inject(
-        gulp.src(angularFiles)
-        .pipe(angularFileSort()), {
+     )
+     .pipe(gulp.dest('build'));
+
+  watch(angularFiles, { base: 'src' }, function (files) {
+    files.pipe(gulp.dest('build'));
+    return gulp.src(htmlFiles, { base: 'src' })
+      .pipe(inject(gulp.src(angularFiles) .pipe(angularFileSort()), {
           relative: true
         }))
       .pipe(gulp.dest('build'));
