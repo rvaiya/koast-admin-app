@@ -67,6 +67,7 @@
     "q": "~1.0.0",
     "ramda": "^0.8.0",
     "rekuire": "^0.1.5",
+    "request": "^2.51.0",
     "semver": "^4.1.0",
     "serve-favicon": "^2.1.4",
     "shortstop": "^1.0.1",
